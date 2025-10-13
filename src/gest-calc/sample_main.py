@@ -17,6 +17,7 @@ def fingers_up(hand_landmarks):
     return fingers.count(True)
 
 
+
 # CLASE PARA LOS BOTONES DE LA CALCULADORA
 class Button:
     def __init__(self, pos, width, height, value):
@@ -49,6 +50,7 @@ WIDTH = 1920
 HEIGHT = 1080
 cap.set(3, WIDTH)
 cap.set(4, HEIGHT)
+
 
 
 # CUADRÍCULA DE LOS BOTONES
@@ -86,9 +88,11 @@ mp_draw = mp.solutions.drawing_utils
 hands = mp_hands.Hands(max_num_hands=1, min_detection_confidence=0.7)
 
 
+
 # VARIABLES DE CONTROL
 operation = ""
 click_time = 0
+
 
 
 # BUCLE PRINCIPAL
@@ -110,9 +114,11 @@ while True:
     cv2.rectangle(img, (operation_x, operation_y), (operation_x + 400, operation_y + 120),
                   (50, 50, 50), 3)
 
+
     # DIBUJAR BOTONES
     for button in buttonlist:
         button.draw(img)
+
 
 
     # DETECCION DE MANOS 
@@ -124,6 +130,15 @@ while True:
     if results.multi_hand_landmarks:
         for handLms in results.multi_hand_landmarks:
             mp_draw.draw_landmarks(img, handLms, mp_hands.HAND_CONNECTIONS)
+
+            # detectar si hay 1 dedo levantado y contar cuántos dedos están levantados
+            count = fingers_up(handLms)
+
+            # Mostrar en pantalla el número de dedos detectado
+            cv2.putText(img, f"Dedos levantados: {count}", (50, 100),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1.2, (255, 0, 0), 3)
+
+
 
             # coordenadas del dedo índice
             x1 = int(handLms.landmark[8].x * w)
