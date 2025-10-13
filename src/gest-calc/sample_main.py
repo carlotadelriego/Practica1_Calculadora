@@ -4,21 +4,18 @@ import time
 
 # FUNCIÓN PARA DETECTAR SI UN DEDO ESTÁ LEVANTADO
 def fingers_up(hand_landmarks):
-    landmarks = hand_landmarks.landmark # lista de puntos de referencia
+    lm = hand_landmarks.landmark
     fingers = []
 
-    if landmarks[4].x < landmarks[3].x:  # pulgar izquierdo
-        fingers.append(landmarks[4].y < landmarks[3].y)
-    else:  # pulgar derecho
-        fingers.append(landmarks[4].y < landmarks[3].y)
+    # Pulgar (horizontal)
+    fingers.append(lm[4].x < lm[3].x)
 
-    tips = [8, 12, 16, 20]  # puntos de referencia de las puntas de los dedos
-    for tip in tips:
-        # Si la punta está por encima de la articulación anterior, es un dedo levantado
-        fingers.append(landmarks[tip].y < landmarks[tip - 2].y)
+    # Otros 4 dedos (vertical)
+    for tip in [8, 12, 16, 20]:
+        fingers.append(lm[tip].y < lm[tip - 2].y)
 
-    # Contamos cuántos están True, son los dedos levantados
     return fingers.count(True)
+
 
 
 
@@ -99,6 +96,7 @@ click_time = 0
 
 
 
+
 # BUCLE PRINCIPAL
 while True:
     success, img = cap.read()
@@ -141,6 +139,41 @@ while True:
             # Mostrar en pantalla el número de dedos detectado
             cv2.putText(img, f"Dedos levantados: {count}", (50, 100),
                         cv2.FONT_HERSHEY_SIMPLEX, 1.2, (255, 0, 0), 3)
+            
+
+            # GESTOS 
+            if count == 0 and time.time() - click_time > 3:
+                operation = ""
+                cv2.putText(img, "BORRANDO...", (250, 200),
+                            cv2.FONT_HERSHEY_SIMPLEX, 1.8, (0, 255, 0), 4)
+                click_time = time.time()
+
+            elif count == 1 and time.time() - click_time > 3:
+                operation += "1"
+                click_time = time.time()
+
+            elif count == 2 and time.time() - click_time > 3:
+                operation += "2"
+                click_time = time.time()
+
+            elif count == 3 and time.time() - click_time > 3:
+                operation += "3"
+                click_time = time.time()
+
+            elif count == 5 and time.time() - click_time > 3:
+                cv2.putText(img, "CALCULANDO...", (250, 200),
+                            cv2.FONT_HERSHEY_SIMPLEX, 1.8, (255, 0, 0), 4)
+                try:
+                    operation = str(eval(operation))
+                except:
+                    operation = "Error"
+                click_time = time.time()
+
+
+
+
+
+            
 
 
 
