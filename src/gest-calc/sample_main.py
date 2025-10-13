@@ -137,31 +137,43 @@ while True:
             # detectar si hay 1 dedo levantado y contar cuántos dedos están levantados
             count = fingers_up(handLms)
 
+            # Comprobar si el gesto se mantiene estable
+            if count == last_count:
+                stable_frames += 1
+            else:
+                stable_frames = 0
+                last_count = count
+
+
             # Mostrar en pantalla el número de dedos detectado
             cv2.putText(img, f"Dedos levantados: {count}", (50, 100),
                         cv2.FONT_HERSHEY_SIMPLEX, 1.2, (255, 0, 0), 3)
             
 
-            # GESTOS 
-            if count == 0 and time.time() - click_time > 3:
+            # GESTOS PARA CONTROLAR LA CALCULADORA
+            if count == 0 and stable_frames > 5 and time.time() - click_time > 3:
                 operation = ""
                 cv2.putText(img, "BORRANDO...", (250, 200),
                             cv2.FONT_HERSHEY_SIMPLEX, 1.8, (0, 255, 0), 4)
                 click_time = time.time()
 
-            elif count == 1 and time.time() - click_time > 3:
+            elif count == 1 and stable_frames > 5 and time.time() - click_time > 3:
                 operation += "1"
                 click_time = time.time()
 
-            elif count == 2 and time.time() - click_time > 3:
-                operation += "2"
+            elif count == 2 and stable_frames > 5 and time.time() - click_time > 3:
+                operation += "-"
                 click_time = time.time()
 
-            elif count == 3 and time.time() - click_time > 3:
-                operation += "3"
+            elif count == 3 and stable_frames > 5 and time.time() - click_time > 3:
+                operation += "*"
                 click_time = time.time()
 
-            elif count == 5 and time.time() - click_time > 3:
+            elif count == 4 and stable_frames > 5 and time.time() - click_time > 3:
+                operation += "+"
+                click_time = time.time()
+
+            elif count == 5 and stable_frames > 5 and time.time() - click_time > 3:
                 cv2.putText(img, "CALCULANDO...", (250, 200),
                             cv2.FONT_HERSHEY_SIMPLEX, 1.8, (255, 0, 0), 4)
                 try:
@@ -172,12 +184,7 @@ while True:
 
 
 
-
-
-            
-
-
-
+            # DIBUJAR CÍRCULO EN DEDO ÍNDICE
             # coordenadas del dedo índice
             x1 = int(handLms.landmark[8].x * w)
             y1 = int(handLms.landmark[8].y * h)
