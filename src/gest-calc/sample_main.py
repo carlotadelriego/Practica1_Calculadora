@@ -2,6 +2,21 @@ import cv2
 import mediapipe as mp
 import time
 
+# FUNCIÓN PARA DETECTAR SI UN DEDO ESTÁ LEVANTADO
+def fingers_up(hand_landmarks):
+    # Índices de las puntas de los dedos (excepto el pulgar)
+    tips = [8, 12, 16, 20]
+    fingers = [] # lista de booleanos, True si el dedo está levantado
+    landmarks = hand_landmarks.landmark # lista de puntos de referencia
+
+    for tip in tips:
+        # Si la punta está por encima de la articulación anterior, es un dedo levantado
+        fingers.append(landmarks[tip].y < landmarks[tip - 2].y)
+
+    # Contamos cuántos están True, son los dedos levantados
+    return fingers.count(True)
+
+
 # CLASE PARA LOS BOTONES DE LA CALCULADORA
 class Button:
     def __init__(self, pos, width, height, value):
