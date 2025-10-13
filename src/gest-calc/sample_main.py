@@ -95,6 +95,10 @@ operation = ""
 click_time = 0
 last_count = -1 # último número de dedos detectado
 stable_frames = 0   # contador de frames estables
+hover_time = 0
+hover_target = None
+hover_start = 0.0
+
 
 
 
@@ -150,30 +154,80 @@ while True:
                         cv2.FONT_HERSHEY_SIMPLEX, 1.2, (255, 0, 0), 3)
             
 
-            # GESTOS PARA CONTROLAR LA CALCULADORA
-            if count == 0 and stable_frames > 5 and time.time() - click_time > 3: # si no hay dedos levantados, se borra la operación
+            # GESTOS PERSONALIZADOS PARA LA CALCULADORA
+
+            # Creamos la lista de dedos levantados (True = arriba)
+            lm = handLms.landmark
+            fingers = []
+            fingers.append(lm[4].x < lm[3].x)  # Pulgar (horizontal)
+            for tip in [8, 12, 16, 20]:
+                fingers.append(lm[tip].y < lm[tip - 2].y)
+
+            # === MAPEO DE GESTOS ===
+            #  ✊ Puño cerrado → borrar
+            if fingers == [False, False, False, False, False] and time.time() - click_time > 3:
                 operation = ""
                 cv2.putText(img, "BORRANDO...", (250, 200),
                             cv2.FONT_HERSHEY_SIMPLEX, 1.8, (0, 255, 0), 4)
                 click_time = time.time()
 
-            elif count == 1 and stable_frames > 5 and time.time() - click_time > 3: # si hay 1 dedo levantado, se añade un "1" a la operación
-                operation += "1"
+            # ☝️ Solo índice → seleccionar botón de la calculadora
+            elif fingers == [False, True, False, False, False]:
+                x1 = int(handLms.landmark[8].x * w)
+                y1 = int(handLms.landmark[8].y * h)
+                cv2.circle(img, (x1, y1), 10, (0, 255, 255), cv2.FILLED)
+
+                for button in buttonlist:
+                    bx, by = button.pos
+                    if bx < x1 < bx + button.width and by < y1 < by + button.height:
+                        button.draw(img, hover=True)
+
+                        # Si se mantiene 3s sobre la tecla, se selecciona
+                        if 'hover_start' not in locals():
+                            hover_start = time.time()
+                            hover_target = button.value
+
+                        if hover_target != button.value:
+                            hover_target = button.value
+                            hover_start = time.time()
+
+                        if time.time() - hover_start > 3:
+                            operation += button.value
+                            cv2.putText(img, f"{button.value}", (250, 200),
+                                        cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 4)
+                            hover_start = time.time()  # reinicia contador
+                        break
+                else:
+                    hover_target = None
+
+
+            # ✌️ Índice + corazón → número 2
+            elif fingers == [False, True, True, False, False] and time.time() - click_time > 3:
+                operation += "2"
                 click_time = time.time()
 
-            elif count == 2 and stable_frames > 5 and time.time() - click_time > 3: # si hay 2 dedos levantados, se añade un "-" a la operación
-                operation += "-"
-                click_time = time.time()
-
-            elif count == 3 and stable_frames > 5 and time.time() - click_time > 3: # si hay 3 dedos levantados, se añade un "*" a la operación
-                operation += "*"
-                click_time = time.time()
-
-            elif count == 4 and stable_frames > 5 and time.time() - click_time > 3: # si hay 4 dedos levantados, se añade un "+" a la operación
+            # 🤘 Índice + meñique → suma (+)
+            elif fingers == [False, True, False, False, True] and time.time() - click_time > 3:
                 operation += "+"
                 click_time = time.time()
 
-            elif count == 5 and stable_frames > 5 and time.time() - click_time > 3:
+            # 🤙 Pulgar + meñique → multiplicación (*)
+            elif fingers == [True, False, False, False, True] and time.time() - click_time > 3:
+                operation += "*"
+                click_time = time.time()
+
+            # ✋ Cuatro dedos (pulgar abajo) → resta (-)
+            elif fingers == [False, True, True, True, True] and time.time() - click_time > 3:
+                operation += "-"
+                click_time = time.time()
+
+            # 🖐️ Cinco dedos → número 5
+            elif fingers == [True, True, True, True, True] and time.time() - click_time > 3:
+                operation += "5"
+                click_time = time.time()
+
+            # 👍 Pulgar en vertical (hacia arriba) → calcular (=)
+            elif fingers[0] and not any(fingers[1:]) and time.time() - click_time > 3:
                 cv2.putText(img, "CALCULANDO...", (250, 200),
                             cv2.FONT_HERSHEY_SIMPLEX, 1.8, (255, 0, 0), 4)
                 try:
@@ -188,19 +242,18 @@ while True:
             # coordenadas del dedo índice
             x1 = int(handLms.landmark[8].x * w)
             y1 = int(handLms.landmark[8].y * h)
-
             cv2.circle(img, (x1, y1), 10, (255, 0, 255), cv2.FILLED)
 
             for button in buttonlist:
-                bx, by = button.pos # para no tener que escribir button.pos[0] y button.pos[1]
+                bx, by = button.pos
                 if bx < x1 < bx + button.width and by < y1 < by + button.height:
-                    button.draw(img, hover=True) # redibujar el botón para que se vea que está "pulsado"
+                    button.draw(img, hover=True)
 
-                    # si se mantiene el dedo 3 segundo sobre el botón, se considera pulsado
-                    if time.time() - click_time > 3:
+                    # usar hover_time separado del click_time
+                    if time.time() - hover_time > 3:
                         something = True
                         received_val = button.value
-                        click_time = time.time()
+                        hover_time = time.time()
                     break
 
 
