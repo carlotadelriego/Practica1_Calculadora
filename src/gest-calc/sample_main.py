@@ -151,25 +151,25 @@ while True:
             
 
             # GESTOS PARA CONTROLAR LA CALCULADORA
-            if count == 0 and stable_frames > 5 and time.time() - click_time > 3:
+            if count == 0 and stable_frames > 5 and time.time() - click_time > 3: # si no hay dedos levantados, se borra la operación
                 operation = ""
                 cv2.putText(img, "BORRANDO...", (250, 200),
                             cv2.FONT_HERSHEY_SIMPLEX, 1.8, (0, 255, 0), 4)
                 click_time = time.time()
 
-            elif count == 1 and stable_frames > 5 and time.time() - click_time > 3:
+            elif count == 1 and stable_frames > 5 and time.time() - click_time > 3: # si hay 1 dedo levantado, se añade un "1" a la operación
                 operation += "1"
                 click_time = time.time()
 
-            elif count == 2 and stable_frames > 5 and time.time() - click_time > 3:
+            elif count == 2 and stable_frames > 5 and time.time() - click_time > 3: # si hay 2 dedos levantados, se añade un "-" a la operación
                 operation += "-"
                 click_time = time.time()
 
-            elif count == 3 and stable_frames > 5 and time.time() - click_time > 3:
+            elif count == 3 and stable_frames > 5 and time.time() - click_time > 3: # si hay 3 dedos levantados, se añade un "*" a la operación
                 operation += "*"
                 click_time = time.time()
 
-            elif count == 4 and stable_frames > 5 and time.time() - click_time > 3:
+            elif count == 4 and stable_frames > 5 and time.time() - click_time > 3: # si hay 4 dedos levantados, se añade un "+" a la operación
                 operation += "+"
                 click_time = time.time()
 
