@@ -13,7 +13,6 @@ camtest:
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-v /dev/:/dev/ \
 		--privileged \
-		--gpus all \
 		--rm \
 		$(IMAGE) python /opt/project/src/gest-calc/webcam_test.py
 
