@@ -4,11 +4,15 @@ import time
 
 # FUNCIÓN PARA DETECTAR SI UN DEDO ESTÁ LEVANTADO
 def fingers_up(hand_landmarks):
-    # Índices de las puntas de los dedos (excepto el pulgar)
-    tips = [8, 12, 16, 20]
-    fingers = [] # lista de booleanos, True si el dedo está levantado
     landmarks = hand_landmarks.landmark # lista de puntos de referencia
+    fingers = []
 
+    if landmarks[4].x < landmarks[3].x:  # pulgar izquierdo
+        fingers.append(landmarks[4].y < landmarks[3].y)
+    else:  # pulgar derecho
+        fingers.append(landmarks[4].y < landmarks[3].y)
+
+    tips = [8, 12, 16, 20]  # puntos de referencia de las puntas de los dedos
     for tip in tips:
         # Si la punta está por encima de la articulación anterior, es un dedo levantado
         fingers.append(landmarks[tip].y < landmarks[tip - 2].y)
