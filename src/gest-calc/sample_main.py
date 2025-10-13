@@ -60,6 +60,10 @@ for y in range(5):
 
 operation = ""
 
+mp_hands = mp.solutions.hands
+mp_draw = mp.solutions.drawing_utils
+hands = mp_hands.Hands(max_num_hands=1, min_detection_confidence=0.7)
+
 while True:
     success, img = cap.read()
 
