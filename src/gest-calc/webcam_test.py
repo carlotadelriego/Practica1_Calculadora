@@ -1,7 +1,7 @@
 import cv2
 
 # corresponding to /dev/video2
-cap = cv2.VideoCapture(2)
+cap = cv2.VideoCapture(0)
 
 if not cap.isOpened():
     print("Failed to open capture")

@@ -26,7 +26,7 @@ class Button:
 
 # CONFIGURACION DE LA CAMARA
 # MUST be configured for each system
-cap = cv2.VideoCapture(2) # here would be 0 or 1 for most systems, but mine is 2
+cap = cv2.VideoCapture(0) # here would be 0 or 1 for most systems, but mine is 2
 # it is the webcam address, in my case in /dev/video2
 
 #input image size, based on your webcam
