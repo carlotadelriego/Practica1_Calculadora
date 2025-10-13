@@ -121,8 +121,8 @@ while True:
                 if bx < x1 < bx + button.width and by < y1 < by + button.height:
                     button.draw(img, hover=True) # redibujar el botón para que se vea que está "pulsado"
 
-                    # si se mantiene el dedo 1 segundo sobre el botón, se considera pulsado
-                    if time.time() - click_time > 1:
+                    # si se mantiene el dedo 3 segundo sobre el botón, se considera pulsado
+                    if time.time() - click_time > 3:
                         something = True
                         received_val = button.value
                         click_time = time.time()
