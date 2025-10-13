@@ -93,7 +93,8 @@ hands = mp_hands.Hands(max_num_hands=1, min_detection_confidence=0.7)
 # VARIABLES DE CONTROL
 operation = ""
 click_time = 0
-
+last_count = -1 # último número de dedos detectado
+stable_frames = 0   # contador de frames estables
 
 
 
