@@ -10,7 +10,7 @@ class Button:
         self.height = height
         self.value = value
 
-    def draw(self, img):
+    def draw(self, img, hover=False):
         cv2.rectangle(img, self.pos, (self.pos[0] + self.width, self.pos[1] + self.height),
                       (225, 225, 225), cv2.FILLED)
         cv2.rectangle(img, self.pos, (self.pos[0] + self.width, self.pos[1] + self.height),
@@ -82,7 +82,6 @@ while True:
     if not success:
         break
 
-    img = cv2.flip(img, 1)  # efecto espejo
     h, w, c = img.shape # alto, ancho, canales
     img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) # convertir a RGB
     results = hands.process(img_rgb) 
