@@ -155,8 +155,7 @@ while True:
             
 
             # GESTOS PERSONALIZADOS PARA LA CALCULADORA
-
-            # Creamos la lista de dedos levantados (True = arriba)
+            # crear la lista de dedos levantados (True = arriba)
             lm = handLms.landmark
             fingers = []
             fingers.append(lm[4].x < lm[3].x)  # Pulgar (horizontal)
@@ -164,14 +163,15 @@ while True:
                 fingers.append(lm[tip].y < lm[tip - 2].y)
 
             # === MAPEO DE GESTOS ===
-            #  ✊ Puño cerrado → borrar
+            #  Puño cerrado: borrar
             if fingers == [False, False, False, False, False] and time.time() - click_time > 3:
                 operation = ""
                 cv2.putText(img, "BORRANDO...", (250, 200),
                             cv2.FONT_HERSHEY_SIMPLEX, 1.8, (0, 255, 0), 4)
                 click_time = time.time()
 
-            # ☝️ Solo índice → seleccionar botón de la calculadora
+
+            # Solo índice: seleccionar botón de la calculadora
             elif fingers == [False, True, False, False, False]:
                 x1 = int(handLms.landmark[8].x * w)
                 y1 = int(handLms.landmark[8].y * h)
@@ -201,32 +201,32 @@ while True:
                     hover_target = None
 
 
-            # ✌️ Índice + corazón → número 2
+            # Índice + corazón: número 2
             elif fingers == [False, True, True, False, False] and time.time() - click_time > 3:
                 operation += "2"
                 click_time = time.time()
 
-            # 🤘 Índice + meñique → suma (+)
+            # Índice + meñique: suma (+)
             elif fingers == [False, True, False, False, True] and time.time() - click_time > 3:
                 operation += "+"
                 click_time = time.time()
 
-            # 🤙 Pulgar + meñique → multiplicación (*)
+            # Pulgar + meñique: multiplicación (*)
             elif fingers == [True, False, False, False, True] and time.time() - click_time > 3:
                 operation += "*"
                 click_time = time.time()
 
-            # ✋ Cuatro dedos (pulgar abajo) → resta (-)
+            # Cuatro dedos (pulgar abajo): resta (-)
             elif fingers == [False, True, True, True, True] and time.time() - click_time > 3:
                 operation += "-"
                 click_time = time.time()
 
-            # 🖐️ Cinco dedos → número 5
+            # Cinco dedos: número 5
             elif fingers == [True, True, True, True, True] and time.time() - click_time > 3:
                 operation += "5"
                 click_time = time.time()
 
-            # 👍 Pulgar en vertical (hacia arriba) → calcular (=)
+            # Pulgar en vertical (hacia arriba): calcular y resultado (=)
             elif fingers[0] and not any(fingers[1:]) and time.time() - click_time > 3:
                 cv2.putText(img, "CALCULANDO...", (250, 200),
                             cv2.FONT_HERSHEY_SIMPLEX, 1.8, (255, 0, 0), 4)
@@ -277,7 +277,7 @@ while True:
     cv2.putText(img, operation, (operation_x + 10, operation_y + 75),
                 cv2.FONT_HERSHEY_PLAIN, 3, (50, 50, 50), 3)
 
-    cv2.imshow('Calculadora por GESTOS', img)
+    cv2.imshow('CALCULADORA POR GESTOS - CARLOTA', img)
 
     key = cv2.waitKey(1)
     if key == ord('q'):
