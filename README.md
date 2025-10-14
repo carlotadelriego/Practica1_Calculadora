@@ -96,8 +96,38 @@ Todo el renderizado ocurre en tiempo real, permitiendo una experiencia fluida y 
 
 ### Lógica del sistema
 
+El funcionamiento interno se basa en tres bloques principales:
+
+1. Detección de mano: Utiliza `mp.solutions.hands.Hands()` para procesar cada fotograma y obtener la posición de los 21 landmarks de la mano. Con estos datos, se determina qué dedos están levantados comparando sus coordenadas.
+
+2. Interpretación de gestos: Se define una función `fingers_up()` que analiza la posición de los dedos y devuelve cuántos están extendidos. Cada patrón se asocia a una acción concreta y el dedo índice se usa como puntero para interactuar con los botones de la calculadora.
+
+3. Renderizado y cálculo: Los botones se definen mediante una clase `Button`, que gestiona su posición, tamaño, valor y aspecto visual. Cada vez que el dedo índice se mantiene sobre un botón durante 3 segundos, se añade su valor a la operación actual, y cuando se detecta el gesto de cálculo, se evalúa la operación con `eval()` y se muestra el resultado en pantalla.
+
+
+---
+
 ### Estructura del proyecto
+
+P1-GEST-CALC/
+├─ README.md
+├─ requirements.txt
+├─ Makefile
+├─ Dockerfile
+├─ vista_previa/
+│  └─ captura.png
+└─ src/gest_calc/
+      ├─ sample_main.py
+      └─ webcam_test.py
+
+
+---
 
 ### Vista previa
 
-### Conclusiones
+![Vista previa de la Calculadora por Gestos](/Users/carlotafernandez/Desktop/UIE/3º/Code/Sistemas_Portfolio/p1-gest-calc/vista_previa/captura.png)
+
+Durante la ejecución se puede observar:
+- El marco de la cámara con los puntos de la mano detectados.
+- Los botones de la calculadora renderizados a la derecha.
+- La operación actual y los mensajes de estado dinámicos (“BORRANDO…”, “CALCULANDO…”).
