@@ -24,8 +24,8 @@ Para poder realizar esta práctica se han necesitado tecnologías como:
 - [OpenCV](https://opencv.org/) para la interfaz visual y control de cámara  
 - [MediaPipe Hands](https://developers.google.com/mediapipe) para la detección y el seguimiento de las manos  
 - [Docker](https://www.docker.com/) + Makefile para el entorno reproducible  
-
 - **time** (módulo de Python) para el control de la estabilidad y el tiempo de espera  
+
 
 ---
 
@@ -66,25 +66,33 @@ Pulsa `q` para salir del programa.
 5. El resultado se mostrará en la pantalla de la calculadora.
 
 
-
 ---
 
 ### Funcionamiento general
 
 El sistema:
 1. Se inicia la cámara y se detecta la mano del usuario.
-2. El sistema interpreta la posición de los dedos mediante MediaPipe Hands.
-3. Se traducen los patrones de los dedos levantados a gestos predefinidos.
-4. Se muestra en pantalla una calculadora virtual con botones renderizados en OpenCV.
-5. Se permiten escribir números y operaciones tanto por gestos como apuntando con el dedo índice.
-6. Se evalúa la operación matemática al hacer el gesto de “pulgar hacia arriba” o desde el botón = situado en la antalla.
+2. El sistema interpreta la posición de los dedos mediante **MediaPipe Hands**, que identifica los 21 puntos de referencia de la mano.
+3. Se traducen los patrones de los dedos levantados a **gestos predefinidos** asignando una acción a cada combinación.
+4. Se muestra en pantalla una **calculadora virtual** con botones renderizados en tiempo real con OpenCV.
+5. Se permiten escribir números y operaciones mediante **gestos específicos** o apuntando con el dedo índice sobre los botones durante 3 segundos.
+6. Finalmente, se evalúa la operación matemática con el gesto de *pulgar hacia arriba* o manteniendo el dedo índice sobre el botón = en la pantalla.
 
 
 ---
 
-### Gestos implementados
-
 ### Interfaz
+
+La interfaz está completamente construida con **OpenCV**, dibujando en tiempo real tanto los botones de la calculadora como los textos informativos.
+- En la esquina derecha se representa la zona de la calculadora con botones de color gris y bordes definidos.
+- En la parte superior de dicha zona se muestra una ventana blanca donde aparece la operación actual y el resultado.
+- En la pantalla se visualiza la mano detectada con sus puntos de referencia y conexiones, generados por MediaPipe.
+- El usuario puede ver en todo momento el número de dedos levantados, los botones resaltados al apuntar con el dedo índice, y los mensajes de estado como “BORRANDO…”.
+
+Todo el renderizado ocurre en tiempo real, permitiendo una experiencia fluida y visualmente intuitiva.
+
+
+---
 
 ### Lógica del sistema
 
