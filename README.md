@@ -63,7 +63,7 @@ Pulsa `q` para salir del programa.
 2. Apunta con el dedo índice al número deseado.
 3. Usa el gesto correspondiente para sumar, restar o multiplicar.
 4. Levanta el pulgar para calcular el resultado.
-5. El resultado se mostrará en el recuadro superior.
+5. El resultado se mostrará en la pantalla de la calculadora.
 
 
 
