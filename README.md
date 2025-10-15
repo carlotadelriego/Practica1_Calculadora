@@ -32,29 +32,31 @@ Para poder realizar esta práctica se han necesitado tecnologías como:
 ## Ejecución del proyecto
 
 ### 1. Requisitos previos
-Instalar las dependencias (para ello se puede usar el archivo `requirements.txt`): `pip install -r requirements.txt`
+Instalar las dependencias (para ello se puede usar el archivo `requirements.txt`): pip install -r requirements.txt
 
 ### 2. Verificación del funcionamiento de la cámara
-Antes de iniciar la calculadora, es recomendable probar que la cámara funciona correctamente ejecutando el código `webcam_test.py``
+Antes de iniciar la calculadora, es recomendable probar que la cámara funciona correctamente ejecutando el código `webcam_test.py`
     *Nota: para los usuarios de Mac es probable que se deba usar la cámara 0, cap = cv2.VideoCapture(0), y eliminar la línea `gpus all` del archivo `Makefile`*
 Si se ve la imagen de la cámara en una ventana llamada “Video2 Full HD”, se puede continuar con la ejecución del programa principal.
 
 ### 3. Ejecución de la Calculadora por Gestos
-Ejecuta el script principal desde la terminal con el comando `python calculadora_gestos.py`
+Ejecuta el script principal desde la terminal con el comando python calculadora_gestos.py
     *RECUERDA: Si tu cámara no se abre, cambia el índice en la línea cap = cv2.VideoCapture(0) por cap = cv2.VideoCapture(1) o cap = cv2.VideoCapture(2) según tu dispositivo.*
 
 ### 4. Control por gestos
 Una vez abierta la ventana de la cámara, MediaPipe detectará tu mano y podrás usar los siguientes gestos para usar la calculadora:
 
-       GESTO                           ACCIÓN
-    Puño cerrado	                Borrar toda la operación
-    Solo índice	                    Seleccionar botón (manteniendo 3 segundos sobre el número/signo)
-    Índice + corazón                Insertar número “2”
-    Índice + meñique                Insertar signo “+”
-    Pulgar + meñique                Insertar signo “*”
-    Cuatro dedos                    Insertar signo “-”
-    Cinco dedos	                    Insertar número “5”
-    Pulgar arriba	                Calcular resultado de la operación (=)
+| Gesto             | Acción                             |
+|-------------------|------------------------------------|
+| Puño cerrado      | Borrar toda la operación           |
+| Solo índice       | Seleccionar botón (3s de espera)   |
+| Índice + corazón  | Insertar número “2”                |
+| Índice + meñique  | Insertar signo “+”                 |
+| Pulgar + meñique  | Insertar signo “*”                 |
+| Cuatro dedos      | Insertar signo “-”                 |
+| Cinco dedos       | Insertar número “5”                |
+| Pulgar arriba     | Calcular resultado (=)             |
+
 
 Pulsa `q` para salir del programa.
 
@@ -84,7 +86,7 @@ El sistema:
 ### Interfaz
 
 La interfaz está completamente construida con **OpenCV**, dibujando en tiempo real tanto los botones de la calculadora como los textos informativos.
-- En la esquina derecha se representa la zona de la calculadora con botones de color gris y bordes definidos.
+- En la esquina derecha se representa la zona de la calculadora con botones de color blanco y bordes definidos.
 - En la parte superior de dicha zona se muestra una ventana blanca donde aparece la operación actual y el resultado.
 - En la pantalla se visualiza la mano detectada con sus puntos de referencia y conexiones, generados por MediaPipe.
 - El usuario puede ver en todo momento el número de dedos levantados, los botones resaltados al apuntar con el dedo índice, y los mensajes de estado como “BORRANDO…”.
@@ -125,9 +127,14 @@ P1-GEST-CALC/
 
 ### Vista previa
 
-![Vista previa de la Calculadora por Gestos](/Users/carlotafernandez/Desktop/UIE/3º/Code/Sistemas_Portfolio/p1-gest-calc/vista_previa/captura.png)
+![Vista previa de la Calculadora por Gestos](vista_previa/captura.png)
 
 Durante la ejecución se puede observar:
 - El marco de la cámara con los puntos de la mano detectados.
 - Los botones de la calculadora renderizados a la derecha.
 - La operación actual y los mensajes de estado dinámicos (“BORRANDO…”, “CALCULANDO…”).
+
+
+* Para poder visualizar el funcionamiento del sistema a través de un vídeo se debe acceder a este enlace: 
+https://drive.google.com/drive/folders/1P9AiL6KSaTIPeYBJPArhTvcLBKOmr5ny?usp=sharing
+
